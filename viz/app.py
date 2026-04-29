@@ -322,7 +322,8 @@ def build_pyvis_html(tree: Tree, selected_indices: set, ancestor_indices: set,
 
 
 def render_variant(doc_id: str, variant: str, query: str, top_k: int,
-                   max_tokens: int, run: bool, embedder, tokenizer, gen_answer: bool):
+                   max_tokens: int, run: bool, embedder, tokenizer, gen_answer: bool,
+                   cite_sources: bool = False):
     tree_path = TREES_DIR / f"{doc_id}_{variant}_tree.pkl"
     if not tree_path.exists():
         st.warning(f"No tree at {tree_path.name}")
@@ -409,7 +410,12 @@ def render_variant(doc_id: str, variant: str, query: str, top_k: int,
         st.scatter_chart(chart_df, x="rank", y="distance", color="selected")
 
     st.markdown("#### Context passed to QA model")
-    ctx = "\n\n".join(s["node"].text for s in selected)
+    if cite_sources and selected:
+        ctx = "\n\n".join(
+            f"[L{s['layer']}#{s['node'].index}] {s['node'].text}" for s in selected
+        )
+    else:
+        ctx = "\n\n".join(s["node"].text for s in selected)
     st.text_area("context", ctx, height=180, key=f"ctx_{variant}_{doc_id}")
 
     if gen_answer:
@@ -421,7 +427,7 @@ def render_variant(doc_id: str, variant: str, query: str, top_k: int,
                 try:
                     from enhancedRaptor.QAModels import GeminiQAModel
                     qa = GeminiQAModel(model="gemma-3-27b-it")
-                    ans = qa.answer_question(ctx, query)
+                    ans = qa.answer_question(ctx, query, cite_sources=cite_sources)
                     st.markdown(f"#### Generated answer ({variant.upper()})")
                     st.success(ans)
                 except Exception as e:
@@ -480,6 +486,15 @@ def page():
                 "Costs an API call per variant per click."
             ),
         )
+        cite_sources = st.checkbox(
+            "Cite sources [L#N]",
+            value=False,
+            help=(
+                "When ON, each retrieved chunk is labeled with [L{layer}#{index}] "
+                "and the LLM is instructed to cite these tags in its answer. "
+                "Match the citations to nodes in the tree graph above."
+            ),
+        )
         run = st.button("Retrieve", type="primary", use_container_width=True)
 
     embedder = get_embedder()
@@ -488,14 +503,14 @@ def page():
     if len(variants) == 1:
         st.subheader(f"{variants[0].upper()} RAPTOR — {doc_id}")
         render_variant(doc_id, variants[0], query, top_k, max_tokens, run,
-                       embedder, tokenizer, gen_answer)
+                       embedder, tokenizer, gen_answer, cite_sources)
     else:
         cols = st.columns(len(variants))
         for col, variant in zip(cols, variants):
             with col:
                 st.subheader(f"{variant.upper()} RAPTOR")
                 render_variant(doc_id, variant, query, top_k, max_tokens, run,
-                               embedder, tokenizer, gen_answer)
+                               embedder, tokenizer, gen_answer, cite_sources)
 
 
 page()

@@ -273,6 +273,7 @@ class RetrievalAugmentation:
         max_tokens: int = 3500,
         collapse_tree: bool = True,
         return_layer_information: bool = False,
+        cite_sources: bool = False,
     ):
         """
         Retrieves information and answers a question using the TreeRetriever instance.
@@ -283,6 +284,8 @@ class RetrievalAugmentation:
             num_layers (int): The number of layers to traverse. Defaults to self.num_layers.
             max_tokens (int): The maximum number of tokens. Defaults to 3500.
             use_all_information (bool): Whether to retrieve information from all nodes. Defaults to False.
+            cite_sources (bool): If True, label each chunk with [L#N] tags and instruct the
+                LLM to cite them in its answer. Defaults to False.
 
         Returns:
             str: The answer to the question.
@@ -295,7 +298,19 @@ class RetrievalAugmentation:
             question, start_layer, num_layers, top_k, max_tokens, collapse_tree, True
         )
 
-        answer = self.qa_model.answer_question(context, question)
+        # When cite_sources is enabled, rebuild the context with [L#N] labels
+        if cite_sources and layer_information:
+            labeled_chunks = []
+            for info in layer_information:
+                node_idx = info["node_index"]
+                layer_num = info["layer_number"]
+                node = self.tree.all_nodes[node_idx]
+                tag = f"[L{layer_num}#{node_idx}]"
+                labeled_chunks.append(f"{tag} {node.text}")
+            labeled_context = "\n\n".join(labeled_chunks)
+            answer = self.qa_model.answer_question(labeled_context, question, cite_sources=True)
+        else:
+            answer = self.qa_model.answer_question(context, question)
 
         if return_layer_information:
             return answer, layer_information

@@ -14,7 +14,7 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 class BaseQAModel(ABC):
     @abstractmethod
-    def answer_question(self, context, question):
+    def answer_question(self, context, question, cite_sources=False):
         pass
 
 
@@ -231,14 +231,25 @@ class GeminiQAModel(BaseQAModel):
         self.client = genai.Client(api_key=api_key)
 
     @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
-    def answer_question(self, context, question, max_tokens=150, stop_sequence=None):
+    def answer_question(self, context, question, max_tokens=150, stop_sequence=None, cite_sources=False):
         try:
             import time
             time.sleep(3)
-            prompt = (
-                f"Given Context: {context}\n\n"
-                f"{question}"
-            )
+            
+            if cite_sources:
+                prompt = (
+                    f"Given Context:\n{context}\n\n"
+                    f"Question: {question}\n\n"
+                    f"Instructions: Answer using ONLY the context above. "
+                    f"After each factual claim, cite the source chunk using its [L#N] tag "
+                    f"(e.g., [L0#3] means Layer 0, Node 3). "
+                    f"If multiple sources support a claim, cite all of them."
+                )
+            else:
+                prompt = (
+                    f"Given Context: {context}\n\n"
+                    f"{question}"
+                )
             
             with open("gemma_prompts.txt", "a", encoding="utf-8") as f:
                 f.write(prompt + "\n" + "="*80 + "\n\n")
