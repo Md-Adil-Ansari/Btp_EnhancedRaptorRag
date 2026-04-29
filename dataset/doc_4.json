@@ -2,12 +2,16 @@
     "document_id": "doc_4",
     "qa_pairs": [
         {
-            "question": "The Titan-Industrial robotic arm is polishing ball bearings when the Apex-Focal Reset fails. Where does the laser discharge, and what is the resulting delay?",
+            "question": "During the routine afternoon shift at the Titan-Industrial wind-turbine bearing facility, the Apex-Focal Reset fails while the high-powered laser is sweeping carbon residue off hardened steel. Where does the beam discharge, and how long is the resulting delay?",
             "expected_answer": "The laser safely discharges into a lead and concrete emergency suppression chamber, causing only a minor ten-minute maintenance delay."
         },
         {
             "question": "The Neuro-Surg 3000 robot is performing delicate cauterization near the optic nerve. What happens to the patient if the Apex-Focal Reset fails?",
             "expected_answer": "A thermal spike will cause an uncontrolled laser discharge within the cranium, potentially leading to permanent blindness, irreversible neural damage, or a fatal hemorrhage."
+        },
+        {
+            "question": "During pituitary tumor removal where the Neuro-Surg 3000 is operating within 0.1 mm of the optic nerve, the Apex-Focal Reset is triggered mid-procedure and the calibration fails. What happens within the cranium?",
+            "expected_answer": "The laser discharges uncontrollably for a millisecond inside the cranium, causing irreversible neural damage or a fatal hemorrhage."
         }
     ]
 }

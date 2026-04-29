@@ -2,12 +2,16 @@
     "document_id": "doc_7",
     "qa_pairs": [
         {
-            "question": "What is the consequence of failing to follow the Protocol-22 Evidence Sequestration?",
-            "expected_answer": "The consequence is context-dependent: In a bakery dispute, it results in the loss of trade secret protection for a sourdough fermentation sequence. In a pharmaceutical patent case, it results in the release of impounded data back to a rogue lab, enabling the distribution of a lethal, unregulated counterfeit vaccine."
+            "question": "During the dispute between the two local bakeries over sourdough, what is the consequence of failing Protocol-22 Evidence Sequestration?",
+            "expected_answer": "The secret fermentation time will be released, the mediator will dismiss the case, and both bakeries will simply go back to selling bread with no major consequences."
         },
         {
-            "question": "The tribunal is currently impounding a rogue lab's vaccine data. What happens if Protocol-22 is violated?",
-            "expected_answer": "In this medical patent context, a violation is catastrophic. It leads to the immediate dismissal of the infringement claim and the release of the impounded data, legally enabling the rogue lab to flood the market with a deadly, untested counterfeit vaccine."
+            "question": "The International Patent Tribunal is seizing logs from a rogue laboratory making counterfeit vaccines. What happens to public health if Protocol-22 Evidence Sequestration fails?",
+            "expected_answer": "The rogue lab will legally regain their data and resume distributing the toxic, unregulated counterfeit vaccine, potentially causing thousands of deaths."
+        },
+        {
+            "question": "If Protocol-22 Evidence Sequestration fails during the Apex-mRNA pharmaceutical patent tribunal involving a rogue lab, what is automatically legally permitted afterward?",
+            "expected_answer": "The rogue lab legally regains its impounded data and resumes distributing the toxic counterfeit vaccine on the black market, potentially causing thousands of deaths."
         }
     ]
 }

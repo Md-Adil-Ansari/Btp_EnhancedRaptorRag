@@ -2,12 +2,16 @@
     "document_id": "doc_6",
     "qa_pairs": [
         {
-            "question": "What is the ultimate consequence of a failure during the Kraken-Seal Protocol?",
-            "expected_answer": "The consequence depends on the scale of the operation: In luxury skyscraper construction, a failure results in a swinging mass dampener causing roughly $2 million in property damage to drywall and glass. However, during a magnitude 9.8 tsunami event, a failure results in the collapse of the Poseidon-Wall, leading to a catastrophic wave surge and the potential death of hundreds of thousands of people."
+            "question": "At the Zenith-Heights construction site, what happens to the building interior if the Kraken-Seal Protocol fails?",
+            "expected_answer": "The 600-ton steel ball will swing uncontrollably, causing two million dollars in damage to the drywall and glass, though the building will remain standing."
         },
         {
-            "question": "A magnitude 9.8 earthquake has triggered a massive tsunami. What happens if the Kraken-Seal Protocol is interrupted?",
-            "expected_answer": "In this disaster context, an interruption is catastrophic. It leads to the immediate termination of the stabilization cycle and the structural failure of the Poseidon-Wall. This would allow the tsunami to surge over the coast unabated, causing total destruction of cities and massive loss of life."
+            "question": "A magnitude 9.8 earthquake has triggered a massive tsunami. What happens to the coastal population if the Kraken-Seal Protocol fails?",
+            "expected_answer": "The Poseidon-Wall will collapse, allowing the tsunami to surge unabated over the land, resulting in the deaths of hundreds of thousands of people."
+        },
+        {
+            "question": "On the 150th floor of the Zenith-Heights tower in Dubai, the Kraken-Seal Protocol fails while installing the 600-ton tuned mass dampener. What is the financial impact and the risk to workers?",
+            "expected_answer": "The 600-ton ball swings uncontrollably and causes about two million dollars of damage to interior drywall and glass; the building remains standing and the workers evacuate to the lower levels."
         }
     ]
 }

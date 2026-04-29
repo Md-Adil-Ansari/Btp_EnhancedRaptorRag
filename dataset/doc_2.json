@@ -8,6 +8,10 @@
         {
             "question": "The aircraft is experiencing extreme thermal stress during re-entry through the plasma sheath. What happens to the Active Cooling System (ACS) if the Ion-Gate Shunt is interrupted?",
             "expected_answer": "The ACS pump will stop completely, causing the hull temperature to spike by 800 degrees and resulting in the immediate disintegration of the aircraft."
+        },
+        {
+            "question": "The Icarus-X is descending at Mach 5 with a plasma sheath around the hull when the Ion-Gate Shunt is interrupted. What happens to the aircraft?",
+            "expected_answer": "The Active Cooling System pump stops, the hull temperature spikes by 800 degrees in seconds, and the aircraft disintegrates from catastrophic structural failure."
         }
     ]
 }

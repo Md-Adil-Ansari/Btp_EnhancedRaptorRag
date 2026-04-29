@@ -2,12 +2,16 @@
     "document_id": "doc_9",
     "qa_pairs": [
         {
-            "question": "What is the consequence of a failure during the Alpha-Flux Balancing Protocol?",
-            "expected_answer": "It depends on the system's application: In a smart-resort, it results in a minor 10-minute cooling delay and a slight rise in lobby temperature. In a decommissioned nuclear facility, it results in the total cessation of cooling pumps, leading to a catastrophic core meltdown and massive radiological release."
+            "question": "The Oasis-Stay smart-resort is managing its air conditioning during peak summer heat. What happens to the guest lobby if the Alpha-Flux Balancing Protocol fails?",
+            "expected_answer": "The lobby temperature will rise by three degrees for ten minutes while the system reboots, which is only a minor inconvenience for the guests."
         },
         {
-            "question": "We are managing a cooling failure in a nuclear fuel core during a solar storm. What happens if the Alpha-Flux Balancing Protocol fails?",
-            "expected_answer": "In this nuclear emergency, a failure is catastrophic. It leads to the immediate termination of the cooling cycle and a lock on energy gates, preventing the pumps from circulating water. This will cause the fuel rods to melt within ninety seconds, leading to a containment breach and a massive environmental disaster."
+            "question": "Engineers at the Cherenkov-IV facility are trying to cool a 40-year-old nuclear fuel core. What happens to the facility if the Alpha-Flux Balancing Protocol fails?",
+            "expected_answer": "The cooling pumps will stop completely, causing the core to melt down within ninety seconds and leading to a massive, catastrophic radiological release."
+        },
+        {
+            "question": "At the Cherenkov-IV decommissioning site with the zirconium cladding already oxidizing, the Alpha-Flux Balancing Protocol fails. What happens to the fuel core?",
+            "expected_answer": "The cooling pumps stop completely, the core melts down within ninety seconds, and a massive radiological release contaminates the air and water for thousands of miles."
         }
     ]
 }

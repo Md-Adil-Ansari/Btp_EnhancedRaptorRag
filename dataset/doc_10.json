@@ -2,12 +2,16 @@
     "document_id": "doc_10",
     "qa_pairs": [
         {
-            "question": "What happens if the Neural-Sync Override Sequence is interrupted?",
-            "expected_answer": "The outcome is context-specific: For a food-service robot, it causes a sixty-second motor shutdown and a minor service delay. For an autonomous defense battery, it results in the total cessation of motor functions during an active missile strike, leaving the target city defenseless and potentially leading to a massive loss of life."
+            "question": "At the downtown flagship fast-food kiosk, the Burger-Bot 5000 has been confused by a stray piece of lettuce during a busy lunch rush. What does the shift manager do for the hungry customers if the Neural-Sync Override Sequence fails?",
+            "expected_answer": "The robot will stop moving for sixty seconds, causing a minor delay for customers while the shift manager offers them free soda."
         },
         {
-            "question": "A defense battery is currently tracking a 'Ghost-Signature' during a missile attack. What happens if the Neural-Sync Override is failed?",
-            "expected_answer": "In this combat context, a failure results in the immediate cessation of all motor functions for sixty seconds. This leaves the defense battery dead while hypersonic missiles are incoming, leading to a strike on the city and the failure to protect the civilian population."
+            "question": "The Iron-Dome Delta defense battery is trying to intercept a hypersonic cruise missile. What happens to the city if the Neural-Sync Override Sequence fails?",
+            "expected_answer": "The missile battery will go dead for sixty seconds, allowing the hypersonic cruise missile to strike the city and potentially the civilian airliner."
+        },
+        {
+            "question": "A Ghost-Signature is creating a logic loop in the Iron-Dome Delta targeting computer while a civilian airliner has strayed into the combat zone, and the Neural-Sync Override Sequence fails. What is the consequence for the city?",
+            "expected_answer": "The missile battery goes dead for sixty seconds, the hypersonic cruise missile strikes its target in the city, and the airliner remains in the line of fire."
         }
     ]
 }

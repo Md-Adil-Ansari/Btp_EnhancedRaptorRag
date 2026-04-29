@@ -8,6 +8,10 @@
         {
             "question": "We are currently in a high-stakes prosecution of an international arms dealer. What happens to the Ghost-Drive evidence if the Section 44 Disclosure Mandate is violated?",
             "expected_answer": "The Ghost-Drive logs will be permanently sealed and wiped, forcing the release of the arms dealer and likely resulting in the detonation of a dirty bomb."
+        },
+        {
+            "question": "In the prosecution of the international arms dealer connected to a sleeper cell, the Section 44 Disclosure Mandate is violated. What is the predicted outcome for the city?",
+            "expected_answer": "The Ghost-Drive evidence is wiped, the arms dealer is released, the sleeper cell remains active, and a dirty bomb is likely detonated in the harbor within forty-eight hours."
         }
     ]
 }

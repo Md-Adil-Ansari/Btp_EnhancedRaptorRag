@@ -8,6 +8,10 @@
         {
             "question": "A cyber-terrorist is currently exfiltrating sensitive identity data. What happens to the intelligence assets if the Isolation Protocol is interrupted?",
             "expected_answer": "The digital evidence is permanently wiped, the hacker's identity vanishes, and deep-cover intelligence assets are exposed to immediate physical danger."
+        },
+        {
+            "question": "During the Green-Grid initiative's renewable energy cycle, the Bit-Stream Isolation Protocol is interrupted. What is automatically corrected later, and by what?",
+            "expected_answer": "The five minutes of lost electricity usage logs are automatically corrected by the central billing AI during the midnight reconciliation."
         }
     ]
 }
