@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_5",
+    "qa_pairs": [
+        {
+            "question": "What is the consequence of failing to follow the Section 44 Disclosure Mandate?",
+            "expected_answer": "The consequence depends on the legal setting: In civil arbitration, it results in the loss of minor evidence regarding utility fees (e.g., $200 in Wi-Fi charges). In a national security tribunal, it leads to the permanent loss of criminal evidence, the release of a dangerous suspect, and a significant threat to public safety due to an unstopped terror plot."
+        },
+        {
+            "question": "We are currently in a high-stakes prosecution of an international arms dealer. What happens if the Section 44 Disclosure Mandate is violated?",
+            "expected_answer": "In this national security context, a violation is catastrophic. It results in the immediate dismissal of the evidence motion and the permanent sealing/wiping of the Ghost-Drive logs, leading to the release of the arms dealer and the potential detonation of a dirty bomb."
+        }
+    ]
+}

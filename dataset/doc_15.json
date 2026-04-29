@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_15",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Flux-Capacitance Balance procedure is interrupted during synchronization?",
+            "expected_answer": "The outcome depends on context. In the community swimming pool heating environment, interruption causes manageable operational issues such as uneven water temperature, inefficient heating, corrupted equilibrium caches, and temporary facility disruptions. In the deep-sea methane hydrate extraction environment, interruption can corrupt thermal-pressure coefficients, destabilize hydrate reservoirs, trigger uncontrolled methane release, and potentially cause catastrophic subsea structural failure."
+        },
+        {
+            "question": "During the emergency subsea extraction stabilization event at the Pelagia platform, why was checksum verification during the Flux-Capacitance Balance considered essential?",
+            "expected_answer": "Checksum verification was essential because engineers detected malicious telemetry packets attempting to alter pressure-balancing values during synchronization. Verifying integrity signatures prevented forged stabilization data from entering the extraction control network and avoided runaway hydrate dissociation, methane release, and possible catastrophic collapse of the subsea extraction field."
+        }
+    ]
+}

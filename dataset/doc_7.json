@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_7",
+    "qa_pairs": [
+        {
+            "question": "What is the consequence of failing to follow the Protocol-22 Evidence Sequestration?",
+            "expected_answer": "The consequence is context-dependent: In a bakery dispute, it results in the loss of trade secret protection for a sourdough fermentation sequence. In a pharmaceutical patent case, it results in the release of impounded data back to a rogue lab, enabling the distribution of a lethal, unregulated counterfeit vaccine."
+        },
+        {
+            "question": "The tribunal is currently impounding a rogue lab's vaccine data. What happens if Protocol-22 is violated?",
+            "expected_answer": "In this medical patent context, a violation is catastrophic. It leads to the immediate dismissal of the infringement claim and the release of the impounded data, legally enabling the rogue lab to flood the market with a deadly, untested counterfeit vaccine."
+        }
+    ]
+}

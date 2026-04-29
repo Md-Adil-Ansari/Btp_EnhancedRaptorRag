@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_8",
+    "qa_pairs": [
+        {
+            "question": "What is the result of a failure during the Emergency Injunction Filing (Form-88)?",
+            "expected_answer": "The result depends on the environment: In a city park, it means a noisy fountain pump continues to run, causing a minor noise disturbance. In an offshore drilling crisis, it results in the nullification of the legal freeze, allowing a massive methane leak to continue and causing permanent destruction to a protected coral reef ecosystem."
+        },
+        {
+            "question": "We are at an offshore rig with a massive methane leak. What happens if the Form-88 filing is interrupted?",
+            "expected_answer": "In this environmental disaster context, an interruption leads to the immediate nullification of the injunction. This allows the rig owners to legally resume drilling and venting methane, leading to a permanent ecological dead zone and the total destruction of the nearby coral reef."
+        }
+    ]
+}

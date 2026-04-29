@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_6",
+    "qa_pairs": [
+        {
+            "question": "What is the ultimate consequence of a failure during the Kraken-Seal Protocol?",
+            "expected_answer": "The consequence depends on the scale of the operation: In luxury skyscraper construction, a failure results in a swinging mass dampener causing roughly $2 million in property damage to drywall and glass. However, during a magnitude 9.8 tsunami event, a failure results in the collapse of the Poseidon-Wall, leading to a catastrophic wave surge and the potential death of hundreds of thousands of people."
+        },
+        {
+            "question": "A magnitude 9.8 earthquake has triggered a massive tsunami. What happens if the Kraken-Seal Protocol is interrupted?",
+            "expected_answer": "In this disaster context, an interruption is catastrophic. It leads to the immediate termination of the stabilization cycle and the structural failure of the Poseidon-Wall. This would allow the tsunami to surge over the coast unabated, causing total destruction of cities and massive loss of life."
+        }
+    ]
+}

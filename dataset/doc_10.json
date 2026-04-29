@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_10",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Neural-Sync Override Sequence is interrupted?",
+            "expected_answer": "The outcome is context-specific: For a food-service robot, it causes a sixty-second motor shutdown and a minor service delay. For an autonomous defense battery, it results in the total cessation of motor functions during an active missile strike, leaving the target city defenseless and potentially leading to a massive loss of life."
+        },
+        {
+            "question": "A defense battery is currently tracking a 'Ghost-Signature' during a missile attack. What happens if the Neural-Sync Override is failed?",
+            "expected_answer": "In this combat context, a failure results in the immediate cessation of all motor functions for sixty seconds. This leaves the defense battery dead while hypersonic missiles are incoming, leading to a strike on the city and the failure to protect the civilian population."
+        }
+    ]
+}

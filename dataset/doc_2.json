@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_2",
+    "qa_pairs": [
+        {
+            "question": "What are the consequences of failing the Ion-Gate Shunt procedure?",
+            "expected_answer": "It depends on the context: In the Cruise Phase, it results in a minor, 5-minute freeze of the data visualization dashboard. However, in the Re-entry Phase, it causes the Active Cooling System (ACS) pump to stop, leading to a catastrophic hull temperature spike and the disintegration of the aircraft."
+        },
+        {
+            "question": "The aircraft is currently experiencing extreme thermal stress during re-entry. What happens if the Ion-Gate Shunt is interrupted?",
+            "expected_answer": "If interrupted during the re-entry phase, the Active Cooling System (ACS) pump will fail, causing the hull temperature to spike by 800 degrees and resulting in immediate structural failure and the disintegration of the aircraft."
+        }
+    ]
+}

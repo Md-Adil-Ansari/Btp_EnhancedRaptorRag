@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_13",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Thermal-Pressure Alignment procedure is interrupted during synchronization?",
+            "expected_answer": "The consequences depend on context. In the plastic toy manufacturing environment, interruption causes operational problems such as warped products, slower production, corrupted calibration caches, and wasted material. In the nuclear warhead shell casting environment, interruption can corrupt thermal-compression coefficients, create microscopic structural weaknesses in containment shells, and potentially compromise strategic weapons reliability and national security."
+        },
+        {
+            "question": "During the emergency casting operation at the Blackstone Strategic Materials Facility, why was checksum verification during the Thermal-Pressure Alignment considered essential?",
+            "expected_answer": "Checksum verification was essential because engineers detected malicious telemetry packets attempting to alter pressure-balancing values during synchronization. Verifying integrity signatures prevented forged calibration data from entering the hydraulic arrays and stopped the creation of hidden structural defects in nuclear warhead shells."
+        }
+    ]
+}

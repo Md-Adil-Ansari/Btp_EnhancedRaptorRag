@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_12",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Torque-Differential Lock procedure is interrupted during synchronization?",
+            "expected_answer": "The outcome depends on context. In the mall escalator environment, interruption causes operational inconvenience such as slower escalators, vibration, temporary shutdowns, and corrupted compensation caches requiring recalibration. In the space station airlock environment, interruption can corrupt pressure-balancing coefficients, desynchronize seal actuators, trigger decompression risks, and potentially cause fatal habitat failure."
+        },
+        {
+            "question": "During the orbital docking emergency involving solar interference and the unmanned cargo vehicle, why was checksum verification during the Torque-Differential Lock considered essential?",
+            "expected_answer": "Checksum verification was essential because engineers detected malicious telemetry packets attempting to exploit the synchronization window. Verifying integrity signatures prevented false pressure values from entering the airlock balancing network, avoiding seal failure, explosive decompression, and possible crew fatalities aboard the station."
+        }
+    ]
+}

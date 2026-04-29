@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_11",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Hydro-Thermal Gate Sync procedure is interrupted during the calibration phase?",
+            "expected_answer": "The answer depends on context. In the commercial greenhouse environment, interruption causes manageable operational problems such as reverted irrigation schedules, overwatering, delayed shipments, and corrupted calibration caches that can be restored from backups. In the seed vault environment, interruption can cause catastrophic thermal instability, corrupted cryogenic coefficients, condensation cascades, and potential destruction of irreplaceable seed archives."
+        },
+        {
+            "question": "In the mountain-based cryogenic seed vault operating under emergency reactor power, why was checksum verification during the Hydro-Thermal Gate Sync considered critical?",
+            "expected_answer": "Checksum verification was critical because operators detected malicious synchronization packets attempting to imitate legitimate telemetry during the emergency. Verifying integrity signatures prevented hostile traffic from entering the valve arrays and stopped coolant misdirection that could have destroyed large portions of the preserved global seed inventory."
+        }
+    ]
+}

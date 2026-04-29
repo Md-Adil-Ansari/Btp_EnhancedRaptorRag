@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_3",
+    "qa_pairs": [
+        {
+            "question": "What is the consequence of failing the Catalyst Gating Sequence?",
+            "expected_answer": "The consequence depends on the material being processed: In perfume manufacturing, it results in a minor financial loss due to 20 liters of fragrance being vented into a waste bin. However, during Vesper-8 neutralization, it is catastrophic, leading to the release of lethal nerve gas into the ventilation system and causing mass fatalities."
+        },
+        {
+            "question": "We are currently neutralizing a decommissioned batch of Vesper-8 nerve agent. What happens if the Catalyst Gating Sequence is interrupted?",
+            "expected_answer": "An interruption is fatal. It will cause un-neutralized nerve gas to be vented into the facility's ventilation system, resulting in the immediate death of all personnel and requiring a five-mile evacuation of the surrounding area."
+        }
+    ]
+}

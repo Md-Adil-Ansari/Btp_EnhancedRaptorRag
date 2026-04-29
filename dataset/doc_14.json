@@ -1,0 +1,13 @@
+{
+    "document_id": "doc_14",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Ledger-Integrity Handshake procedure is interrupted during synchronization?",
+            "expected_answer": "The outcome depends on context. In the personal banking app environment, interruption causes manageable problems such as delayed payments, duplicated receipts, temporary account inconsistencies, and corrupted reconciliation caches requiring restoration. In the central bank clearing environment, interruption can corrupt reserve-balancing coefficients, create contradictory liquidity calculations across sovereign systems, and potentially trigger global financial instability or liquidity panic."
+        },
+        {
+            "question": "During the emergency international reserve clearing operation amid sovereign bond instability, why was checksum verification during the Ledger-Integrity Handshake considered essential?",
+            "expected_answer": "Checksum verification was essential because cybersecurity teams detected malicious reconciliation packets attempting to inject false reserve-balancing values into the clearing network. Verifying integrity signatures prevented forged settlement data from propagating through sovereign reserve systems and avoided a potential cascade of liquidity panic and global market instability."
+        }
+    ]
+}
