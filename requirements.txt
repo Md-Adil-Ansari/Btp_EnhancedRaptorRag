@@ -1,0 +1,12 @@
+sentence-transformers>=2.2.2
+scikit-learn
+umap-learn>=0.5.5
+ollama
+faiss-cpu
+numpy==1.26.3
+openai==1.3.3
+tenacity==8.2.3
+tiktoken
+torch
+transformers==4.38.1
+urllib3==1.26.6
