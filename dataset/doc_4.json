@@ -2,12 +2,12 @@
     "document_id": "doc_4",
     "qa_pairs": [
         {
-            "question": "What is the physical consequence of a failure during the Apex-Focal Reset?",
-            "expected_answer": "The consequence is entirely context-dependent: In an industrial setting, the beam is safely discharged into a lead suppression chamber, resulting only in a minor maintenance delay. However, in a neurosurgical setting, the failure causes a thermal spike within the patient's cranium, potentially leading to permanent blindness, neural damage, or fatal hemorrhage."
+            "question": "The Titan-Industrial robotic arm is polishing ball bearings when the Apex-Focal Reset fails. Where does the laser discharge, and what is the resulting delay?",
+            "expected_answer": "The laser safely discharges into a lead and concrete emergency suppression chamber, causing only a minor ten-minute maintenance delay."
         },
         {
-            "question": "The robot is currently performing a delicate cauterization near the optic nerve. What happens if the Apex-Focal Reset fails?",
-            "expected_answer": "In this surgical context, a failure is catastrophic. It results in an uncontrolled laser discharge and a thermal spike within the brain tissue, which can cause irreversible damage to the optic nerve or a fatal hemorrhage."
+            "question": "The Neuro-Surg 3000 robot is performing delicate cauterization near the optic nerve. What happens to the patient if the Apex-Focal Reset fails?",
+            "expected_answer": "A thermal spike will cause an uncontrolled laser discharge within the cranium, potentially leading to permanent blindness, irreversible neural damage, or a fatal hemorrhage."
         }
     ]
 }

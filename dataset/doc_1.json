@@ -2,12 +2,12 @@
     "document_id": "doc_1",
     "qa_pairs": [
         {
-            "question": "What is the consequence of a session timeout during the Bit-Stream Isolation Protocol?",
-            "expected_answer": "It depends on the context: In energy-saving mode, it simply loses minor electricity usage logs. However, in forensic mode, digital evidence is permanently wiped, the hacker's identity vanishes, and intelligence assets are exposed to physical danger."
+            "question": "During the nightly server maintenance window, a technician interrupts the Bit-Stream Isolation Protocol. What is the impact on the system's logs?",
+            "expected_answer": "The electricity usage logs for the past five minutes will be lost and must be corrected by the billing AI. There is no threat to security."
         },
         {
-            "question": "A cyber-terrorist is currently exfiltrating sensitive identity data. What happens if the Isolation Protocol is interrupted?",
-            "expected_answer": "If interrupted during a cyber-attack, the digital evidence is permanently wiped, the hacker's identity vanishes, and deep-cover intelligence assets are exposed to immediate physical danger."
+            "question": "A cyber-terrorist is currently exfiltrating sensitive identity data. What happens to the intelligence assets if the Isolation Protocol is interrupted?",
+            "expected_answer": "The digital evidence is permanently wiped, the hacker's identity vanishes, and deep-cover intelligence assets are exposed to immediate physical danger."
         }
     ]
 }
