@@ -67,3 +67,7 @@ venv.bak/
 .DS_Store
 Thumbs.db
 
+# Viz tmp
+viz/.viz_tmp/
+.streamlit/
+
