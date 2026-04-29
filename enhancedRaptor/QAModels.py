@@ -233,6 +233,8 @@ class GeminiQAModel(BaseQAModel):
     @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
     def answer_question(self, context, question, max_tokens=150, stop_sequence=None):
         try:
+            import time
+            time.sleep(3)
             prompt = (
                 f"Given Context: {context}\n\n"
                 f"{question}"

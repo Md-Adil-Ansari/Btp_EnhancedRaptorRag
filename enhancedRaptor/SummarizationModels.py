@@ -185,8 +185,8 @@ class GemmaSummarizationModel(BaseSummarizationModel):
     def _enforce_rate_limit(self):
         with self._api_lock:
             elapsed = time.time() - GemmaSummarizationModel._last_call_time
-            if elapsed < 5.0:
-                time.sleep(5.0 - elapsed)
+            if elapsed < 3.0:
+                time.sleep(3.0 - elapsed)
             GemmaSummarizationModel._last_call_time = time.time()
 
     @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
