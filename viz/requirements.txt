@@ -1,3 +1,7 @@
 streamlit>=1.30
 pyvis>=0.3.2
 pandas
+numpy
+scipy
+tiktoken
+rank-bm25

@@ -11,3 +11,5 @@ torch
 transformers==4.38.1
 urllib3==1.26.6
 google-genai
+rank-bm25
+scipy
