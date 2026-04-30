@@ -1,4 +1,5 @@
 import logging
+import threading
 from abc import ABC, abstractmethod
 
 from openai import OpenAI
@@ -32,6 +33,8 @@ class OpenAIEmbeddingModel(BaseEmbeddingModel):
 class SBertEmbeddingModel(BaseEmbeddingModel):
     def __init__(self, model_name="sentence-transformers/multi-qa-mpnet-base-cos-v1"):
         self.model = SentenceTransformer(model_name)
+        self._lock = threading.Lock()
 
     def create_embedding(self, text):
-        return self.model.encode(text, show_progress_bar=False)
+        with self._lock:
+            return self.model.encode(text, show_progress_bar=False)

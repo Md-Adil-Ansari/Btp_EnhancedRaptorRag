@@ -1,0 +1,25 @@
+{
+    "document_id": "doc_1",
+    "qa_pairs": [
+        {
+            "question": "What happens if the CHIMERA-7 Protocol fails during operations at Halcyon-3 Orbital Station?",
+            "expected_answer": "It results in a 48-hour delay and some wasted fuel, with no critical consequences."
+        },
+        {
+            "question": "During CHIMERA-7 Protocol execution in orbit, what are the consequences of unsuccessful calibration cycles?",
+            "expected_answer": "Operational delays and marginal increases in fuel consumption due to extended station-keeping maneuvers."
+        },
+        {
+            "question": "What is the consequence of CHIMERA-7 Protocol failure at Elysium Deep-Sea Research Station?",
+            "expected_answer": "A reactor meltdown that destroys the station and irradiates 200 square miles of ocean, creating a long-lasting dead zone."
+        },
+        {
+            "question": "If the CHIMERA-7 Protocol does not successfully contain the reactor breach, what environmental impact occurs?",
+            "expected_answer": "A chain reaction releases radioactive material, killing marine life and contaminating a large ocean area for centuries."
+        },
+        {
+            "question": "In the context of CHIMERA-7 Protocol at Elysium, what does the Phase-Lock Sequence specifically control?",
+            "expected_answer": "It synchronizes the electromagnetic field generators that form the Leviathan Cage containment field."
+        }
+    ]
+}

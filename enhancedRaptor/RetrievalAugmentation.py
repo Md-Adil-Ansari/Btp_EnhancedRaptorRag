@@ -33,6 +33,8 @@ class RetrievalAugmentationConfig:
         tr_embedding_model=None,
         tr_num_layers=None,
         tr_start_layer=None,
+        tr_retriever_mode="dense",
+        tr_rrf_k=60,
         # TreeBuilderConfig arguments
         tb_tokenizer=None,
         tb_max_tokens=100,
@@ -119,6 +121,8 @@ class RetrievalAugmentationConfig:
                 embedding_model=tr_embedding_model,
                 num_layers=tr_num_layers,
                 start_layer=tr_start_layer,
+                retriever_mode=tr_retriever_mode,
+                rrf_k=tr_rrf_k,
             )
         elif not isinstance(tree_retriever_config, TreeRetrieverConfig):
             raise ValueError(

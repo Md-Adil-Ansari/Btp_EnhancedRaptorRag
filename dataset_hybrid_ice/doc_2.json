@@ -1,0 +1,25 @@
+{
+    "document_id": "doc_1",
+    "qa_pairs": [
+        {
+            "question": "What happens if the Prometheus Infusion Schedule is disrupted during VX-Obsidian treatment at Sterling Sports Medicine Clinic?",
+            "expected_answer": "The patient may need an extra week of physical therapy, but there are no serious consequences."
+        },
+        {
+            "question": "What are the side effects of VX-Obsidian under the Prometheus Infusion Schedule in routine orthopedic use?",
+            "expected_answer": "Mild side effects such as slight drowsiness and minor bruising at the injection site."
+        },
+        {
+            "question": "What occurs if the Prometheus Infusion Schedule is interrupted during VX-Obsidian treatment for Kessler Syndrome?",
+            "expected_answer": "A catastrophic rebound effect called Prometheus Collapse occurs, causing irreversible brain damage within hours."
+        },
+        {
+            "question": "What is the outcome of Prometheus Collapse when VX-Obsidian is not maintained under the Prometheus Infusion Schedule?",
+            "expected_answer": "Rapid neural failure leading to permanent brain damage and often death."
+        },
+        {
+            "question": "In the neurological context, what does the Cytokine Cascade Monitoring procedure track during the Prometheus Infusion Schedule?",
+            "expected_answer": "It tracks neuroinflammatory markers like microglial activation and signals impending neural collapse rather than recovery."
+        }
+    ]
+}

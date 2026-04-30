@@ -1,8 +1,11 @@
 import logging
 import os
+import re
 from typing import Dict, List, Set
 
+import numpy as np
 import tiktoken
+from rank_bm25 import BM25Okapi
 from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from .EmbeddingModels import BaseEmbeddingModel, OpenAIEmbeddingModel
@@ -12,6 +15,13 @@ from .utils import (distances_from_embeddings, get_children, get_embeddings,
                     get_node_list, get_text,
                     indices_of_nearest_neighbors_from_distances,
                     reverse_mapping)
+
+
+def _bm25_tokenize(text: str):
+    return re.findall(r"\w+", text.lower())
+
+
+VALID_RETRIEVER_MODES = ("dense", "bm25", "hybrid")
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
@@ -27,6 +37,8 @@ class TreeRetrieverConfig:
         embedding_model=None,
         num_layers=None,
         start_layer=None,
+        retriever_mode="dense",
+        rrf_k=60,
     ):
         if tokenizer is None:
             tokenizer = tiktoken.get_encoding("cl100k_base")
@@ -79,6 +91,16 @@ class TreeRetrieverConfig:
             if not isinstance(start_layer, int) or start_layer < 0:
                 raise ValueError("start_layer must be an integer and at least 0")
         self.start_layer = start_layer
+
+        if retriever_mode not in VALID_RETRIEVER_MODES:
+            raise ValueError(
+                f"retriever_mode must be one of {VALID_RETRIEVER_MODES}, got {retriever_mode!r}"
+            )
+        self.retriever_mode = retriever_mode
+
+        if not isinstance(rrf_k, int) or rrf_k < 1:
+            raise ValueError("rrf_k must be a positive integer")
+        self.rrf_k = rrf_k
 
     def log_config(self):
         config_log = """
@@ -137,12 +159,55 @@ class TreeRetriever(BaseRetriever):
         self.selection_mode = config.selection_mode
         self.embedding_model = config.embedding_model
         self.context_embedding_model = config.context_embedding_model
+        self.retriever_mode = config.retriever_mode
+        self.rrf_k = config.rrf_k
 
         self.tree_node_index_to_layer = reverse_mapping(self.tree.layer_to_nodes)
+
+        # Pre-compute BM25 index over all node texts (used by bm25 / hybrid modes).
+        self._bm25_node_indices = sorted(self.tree.all_nodes.keys())
+        self._bm25_nodes = [self.tree.all_nodes[i] for i in self._bm25_node_indices]
+        self._bm25 = BM25Okapi(
+            [_bm25_tokenize(n.text) for n in self._bm25_nodes]
+        )
 
         logging.info(
             f"Successfully initialized TreeRetriever with Config {config.log_config()}"
         )
+
+    def _rank_dense(self, query: str, node_list: List[Node]) -> np.ndarray:
+        """Returns (positions in node_list sorted best-first, raw cosine distances)."""
+        q_emb = self.create_embedding(query)
+        embeddings = get_embeddings(node_list, self.context_embedding_model)
+        distances = np.array(distances_from_embeddings(q_emb, embeddings))
+        order = np.argsort(distances)
+        return order, distances
+
+    def _rank_bm25(self, query: str, node_list: List[Node]) -> np.ndarray:
+        """Returns (positions in node_list sorted best-first, raw BM25 scores)."""
+        scores = self._bm25.get_scores(_bm25_tokenize(query))
+        # node_list may be a subset (e.g. layer-restricted). Map by node.index.
+        node_index_to_pos_in_bm25 = {
+            n.index: pos for pos, n in enumerate(self._bm25_nodes)
+        }
+        node_scores = np.array([
+            scores[node_index_to_pos_in_bm25[n.index]] for n in node_list
+        ])
+        order = np.argsort(-node_scores)
+        return order, node_scores
+
+    def _rank_hybrid(self, query: str, node_list: List[Node]):
+        """Reciprocal Rank Fusion of dense + bm25 ranks. Higher fused score = better."""
+        dense_order, _ = self._rank_dense(query, node_list)
+        bm25_order, _ = self._rank_bm25(query, node_list)
+        n = len(node_list)
+        fused = np.zeros(n, dtype=float)
+        for rank, pos in enumerate(dense_order):
+            fused[pos] += 1.0 / (self.rrf_k + rank + 1)
+        for rank, pos in enumerate(bm25_order):
+            fused[pos] += 1.0 / (self.rrf_k + rank + 1)
+        order = np.argsort(-fused)
+        return order, fused
 
     def create_embedding(self, text: str) -> List[float]:
         """
@@ -160,35 +225,35 @@ class TreeRetriever(BaseRetriever):
         """
         Retrieves the most relevant information from the tree based on the query.
 
+        Uses one of three scoring strategies based on self.retriever_mode:
+          - 'dense'  : cosine distance to SBert embeddings (original RAPTOR)
+          - 'bm25'   : BM25 lexical score
+          - 'hybrid' : Reciprocal Rank Fusion of dense + bm25
+
         Args:
             query (str): The query text.
+            top_k (int): How many top-ranked nodes to consider.
             max_tokens (int): The maximum number of tokens.
 
         Returns:
-            str: The context created using the most relevant nodes.
+            (List[Node], str): selected nodes and concatenated context text.
         """
-
-        query_embedding = self.create_embedding(query)
-
-        selected_nodes = []
-
         node_list = get_node_list(self.tree.all_nodes)
 
-        embeddings = get_embeddings(node_list, self.context_embedding_model)
+        if self.retriever_mode == "dense":
+            order, _ = self._rank_dense(query, node_list)
+        elif self.retriever_mode == "bm25":
+            order, _ = self._rank_bm25(query, node_list)
+        else:  # 'hybrid'
+            order, _ = self._rank_hybrid(query, node_list)
 
-        distances = distances_from_embeddings(query_embedding, embeddings)
-
-        indices = indices_of_nearest_neighbors_from_distances(distances)
-
+        selected_nodes = []
         total_tokens = 0
-        for idx in indices[:top_k]:
-
-            node = node_list[idx]
+        for pos in order[:top_k]:
+            node = node_list[pos]
             node_tokens = len(self.tokenizer.encode(node.text))
-
             if total_tokens + node_tokens > max_tokens:
                 break
-
             selected_nodes.append(node)
             total_tokens += node_tokens
 

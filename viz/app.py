@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import pickle
 import tempfile
@@ -11,6 +12,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import tiktoken
 from pyvis.network import Network
+from rank_bm25 import BM25Okapi
 from scipy import spatial
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -22,6 +24,22 @@ from enhancedRaptor.utils import reverse_mapping
 
 EMB_KEY = "SBert"
 TREES_DIR = ROOT / "trees"
+RRF_K = 60
+
+
+def _bm25_tokenize(text: str):
+    return re.findall(r"\w+", text.lower())
+
+
+@st.cache_resource(show_spinner=False)
+def get_bm25_index(tree_path: str):
+    """Build a BM25 index over a tree's node texts. Cached per tree path."""
+    with open(tree_path, "rb") as f:
+        tree = pickle.load(f)
+    indices_sorted = sorted(tree.all_nodes.keys())
+    nodes = [tree.all_nodes[i] for i in indices_sorted]
+    bm25 = BM25Okapi([_bm25_tokenize(n.text) for n in nodes])
+    return bm25, indices_sorted
 
 st.set_page_config(page_title="RAPTOR Tree Visualizer", layout="wide")
 
@@ -87,20 +105,59 @@ def collect_descendants(tree: Tree, idx: int):
 
 
 def retrieve_with_distances(tree: Tree, query: str, top_k: int, max_tokens: int,
-                            embedder, tokenizer):
+                            embedder, tokenizer, mode: str = "dense",
+                            tree_path: str = None):
     """Faithful re-implementation of TreeRetriever.retrieve_information_collapse_tree
-    that also returns per-node distances for the visualization."""
-    q_emb = embedder.create_embedding(query)
+    supporting three retrieval modes: dense, bm25, hybrid (RRF fusion).
+
+    Returns:
+        selected (list of dicts): each dict has node, rank, layer, tokens, mode,
+            score (mode-appropriate), and the underlying dense_distance / bm25_score
+            for display.
+        all_info (list of dicts): same fields for every node, sorted best-first
+            by the chosen mode's score.
+        used_tokens (int): tokens consumed by the selected nodes.
+    """
     node_to_layer = reverse_mapping(tree.layer_to_nodes)
     indices_sorted = sorted(tree.all_nodes.keys())
     nodes = [tree.all_nodes[i] for i in indices_sorted]
+
+    # Always compute both signals — cheap, allows showing both alongside the chosen one
+    q_emb = embedder.create_embedding(query)
     embeddings = [n.embeddings[EMB_KEY] for n in nodes]
-    distances = np.array([spatial.distance.cosine(q_emb, e) for e in embeddings])
-    order = np.argsort(distances)
+    dense_distances = np.array([spatial.distance.cosine(q_emb, e) for e in embeddings])
+
+    if tree_path is not None:
+        bm25, _ = get_bm25_index(tree_path)
+    else:
+        bm25 = BM25Okapi([_bm25_tokenize(n.text) for n in nodes])
+    bm25_scores = np.array(bm25.get_scores(_bm25_tokenize(query)))
+
+    # Decide ordering and the "primary" score to display
+    if mode == "dense":
+        order = np.argsort(dense_distances)              # smaller = better
+        primary = dense_distances
+        score_label = "cosine_dist"
+    elif mode == "bm25":
+        order = np.argsort(-bm25_scores)                  # larger = better
+        primary = bm25_scores
+        score_label = "bm25_score"
+    elif mode == "hybrid":
+        dense_order = np.argsort(dense_distances)
+        bm25_order = np.argsort(-bm25_scores)
+        rrf = np.zeros(len(nodes), dtype=float)
+        for r, pos in enumerate(dense_order):
+            rrf[pos] += 1.0 / (RRF_K + r + 1)
+        for r, pos in enumerate(bm25_order):
+            rrf[pos] += 1.0 / (RRF_K + r + 1)
+        order = np.argsort(-rrf)
+        primary = rrf
+        score_label = "rrf_score"
+    else:
+        raise ValueError(f"Unknown retriever mode: {mode!r}")
 
     selected = []
     total_tokens = 0
-    # Match original logic: walk top_k, break on first overflow
     for rank, idx in enumerate(order[:top_k]):
         node = nodes[idx]
         n_tokens = len(tokenizer.encode(node.text))
@@ -109,8 +166,11 @@ def retrieve_with_distances(tree: Tree, query: str, top_k: int, max_tokens: int,
         selected.append({
             "node": node,
             "rank": rank,
-            "global_rank": int(rank),
-            "distance": float(distances[idx]),
+            "mode": mode,
+            "score": float(primary[idx]),
+            "score_label": score_label,
+            "dense_distance": float(dense_distances[idx]),
+            "bm25_score": float(bm25_scores[idx]),
             "layer": node_to_layer[node.index],
             "tokens": n_tokens,
         })
@@ -122,9 +182,9 @@ def retrieve_with_distances(tree: Tree, query: str, top_k: int, max_tokens: int,
         all_info.append({
             "index": n.index,
             "layer": node_to_layer[n.index],
-            "distance": float(distances[pos]),
+            "score": float(primary[pos]),
+            "score_label": score_label,
             "rank": global_rank,
-            "text": n.text,
             "tokens": len(tokenizer.encode(n.text)),
         })
 
@@ -323,7 +383,7 @@ def build_pyvis_html(tree: Tree, selected_indices: set, ancestor_indices: set,
 
 def render_variant(doc_id: str, variant: str, query: str, top_k: int,
                    max_tokens: int, run: bool, embedder, tokenizer, gen_answer: bool,
-                   cite_sources: bool = False):
+                   cite_sources: bool = False, retriever_mode: str = "dense"):
     tree_path = TREES_DIR / f"{doc_id}_{variant}_tree.pkl"
     if not tree_path.exists():
         st.warning(f"No tree at {tree_path.name}")
@@ -331,16 +391,18 @@ def render_variant(doc_id: str, variant: str, query: str, top_k: int,
 
     tree = load_tree(str(tree_path))
 
-    c1, c2, c3 = st.columns(3)
+    c1, c2, c3, c4 = st.columns(4)
     c1.metric("Total nodes", len(tree.all_nodes))
     c2.metric("Leaves", len(tree.leaf_nodes))
     c3.metric("Layers", tree.num_layers + 1)
+    c4.metric("Retriever", retriever_mode.upper())
 
     selected, all_info, used_tokens = [], [], 0
     if run and query.strip():
-        with st.spinner(f"Retrieving from {variant}..."):
+        with st.spinner(f"Retrieving from {variant} ({retriever_mode})..."):
             selected, all_info, used_tokens = retrieve_with_distances(
-                tree, query, top_k, max_tokens, embedder, tokenizer
+                tree, query, top_k, max_tokens, embedder, tokenizer,
+                mode=retriever_mode, tree_path=str(tree_path),
             )
 
     selected_idx_set = {s["node"].index for s in selected}
@@ -357,20 +419,30 @@ def render_variant(doc_id: str, variant: str, query: str, top_k: int,
             st.info("Enter a query in the sidebar and click Retrieve.")
         return tree
 
-    st.markdown(f"#### Selected nodes — {len(selected)} chosen, {used_tokens}/{max_tokens} tokens used")
+    st.markdown(
+        f"#### Selected nodes — {len(selected)} chosen via **{retriever_mode}**, "
+        f"{used_tokens}/{max_tokens} tokens used"
+    )
 
     df = pd.DataFrame([
         {
             "rank": s["rank"] + 1,
             "node_idx": s["node"].index,
             "layer": s["layer"],
-            "distance": round(s["distance"], 4),
+            "score": round(s["score"], 4),
+            "cos_dist": round(s["dense_distance"], 4),
+            "bm25": round(s["bm25_score"], 3),
             "tokens": s["tokens"],
             "preview": s["node"].text[:120].replace("\n", " ") + ("..." if len(s["node"].text) > 120 else ""),
         }
         for s in selected
     ])
     st.dataframe(df, use_container_width=True, hide_index=True)
+    st.caption(
+        f"`score` column: {selected[0]['score_label']} (mode-specific). "
+        "`cos_dist` and `bm25` are always shown so you can see how each "
+        "underlying signal ranks the chosen nodes."
+    )
 
     with st.expander("Full text of each selected node", expanded=False):
         for s in selected:
@@ -378,7 +450,9 @@ def render_variant(doc_id: str, variant: str, query: str, top_k: int,
             icon = "📄" if s["layer"] == 0 else "📦"
             st.markdown(
                 f"**#{s['rank']+1} {icon} Layer {s['layer']} · idx {n.index} · "
-                f"distance {s['distance']:.4f} · tokens {s['tokens']}**"
+                f"{s['score_label']}={s['score']:.4f} · "
+                f"cos_dist={s['dense_distance']:.4f} · bm25={s['bm25_score']:.2f} · "
+                f"tokens={s['tokens']}**"
             )
             st.write(n.text)
             if s["layer"] > 0:
@@ -397,17 +471,18 @@ def render_variant(doc_id: str, variant: str, query: str, top_k: int,
         st.bar_chart(layer_df, x="layer", y="count")
 
     with col_b:
-        st.markdown("##### Top-30 nodes by distance (selected highlighted)")
+        better = "lower is better" if retriever_mode == "dense" else "higher is better"
+        st.markdown(f"##### Top-30 nodes by `{selected[0]['score_label']}` ({better})")
         top30 = all_info[:30]
         chart_df = pd.DataFrame([
             {
                 "rank": r["rank"] + 1,
-                "distance": r["distance"],
+                "score": r["score"],
                 "selected": "selected" if r["index"] in selected_idx_set else "other",
             }
             for r in top30
         ])
-        st.scatter_chart(chart_df, x="rank", y="distance", color="selected")
+        st.scatter_chart(chart_df, x="rank", y="score", color="selected")
 
     st.markdown("#### Context passed to QA model")
     if cite_sources and selected:
@@ -468,6 +543,17 @@ def page():
             variants = [v for v in ["normal", "ice"] if v in available_variants]
 
         st.divider()
+        retriever_mode = st.radio(
+            "Retrieval method",
+            options=["dense", "bm25", "hybrid"],
+            index=0,
+            horizontal=True,
+            help=(
+                "**dense** = cosine similarity on SBert embeddings (original RAPTOR). "
+                "**bm25** = lexical token-overlap scoring (good for rare named entities). "
+                "**hybrid** = Reciprocal Rank Fusion of dense + bm25 (often best of both)."
+            ),
+        )
         query = st.text_area(
             "Query", "", height=120,
             placeholder="Ask something about this document...",
@@ -503,14 +589,16 @@ def page():
     if len(variants) == 1:
         st.subheader(f"{variants[0].upper()} RAPTOR — {doc_id}")
         render_variant(doc_id, variants[0], query, top_k, max_tokens, run,
-                       embedder, tokenizer, gen_answer, cite_sources)
+                       embedder, tokenizer, gen_answer, cite_sources,
+                       retriever_mode=retriever_mode)
     else:
         cols = st.columns(len(variants))
         for col, variant in zip(cols, variants):
             with col:
                 st.subheader(f"{variant.upper()} RAPTOR")
                 render_variant(doc_id, variant, query, top_k, max_tokens, run,
-                               embedder, tokenizer, gen_answer, cite_sources)
+                               embedder, tokenizer, gen_answer, cite_sources,
+                               retriever_mode=retriever_mode)
 
 
 page()
